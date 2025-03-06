@@ -8,6 +8,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt update && apt upgrade -y && \
     apt install -y \
     build-essential \
+    automake libtool \
     python3 python3-pip \
     git curl wget \
     net-tools iproute2 dnsutils \
@@ -15,7 +16,8 @@ RUN apt update && apt upgrade -y && \
     openssh-client \
     nodejs npm \
     docker.io \
-    sudo \
+    sudo zip unzip \
+    openjdk-17-jdk-headless ant \
     vim nano emacs && \
     apt clean && rm -rf /var/lib/apt/lists/*
 
@@ -28,7 +30,8 @@ RUN mkdir -p /etc/sudoers.d && \
 RUN usermod -aG sudo ubuntu
 
 # Ensure Ubuntu has a proper directory
-RUN mkdir -p /home/ubuntu/.ssh && chmod 700 /home/ubuntu/.ssh && chown ubuntu .ssh
+RUN mkdir -p /home/ubuntu/.ssh && touch /home/ubuntu/.ssh/authorized_keys
+RUN chmod 700 /home/ubuntu/.ssh && chmod 600 /home/ubuntu/.ssh/* && chown -R ubuntu /home/ubuntu/.ssh
 
 # Switch to the default user that already exists in Ubuntu images
 USER ubuntu
